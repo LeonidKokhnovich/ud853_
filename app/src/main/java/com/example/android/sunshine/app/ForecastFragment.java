@@ -120,6 +120,13 @@ public class ForecastFragment extends Fragment {
             return highLowStr;
         }
 
+        @Override
+        protected void onPostExecute(String[] strings) {
+            adapter.clear();
+            adapter.addAll(strings);
+            adapter.notifyDataSetChanged();
+        }
+
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
