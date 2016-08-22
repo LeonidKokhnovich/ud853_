@@ -12,4 +12,13 @@
     <string name="pref_location_key" translatable="false">location</string>
     <string name="pref_location_default_val" translatable="false">V3M5B0,CA</string>
 
+    <string name="pref_title_temp_units">Temperature units</string>
+    <string name="pref_key_temp_units" translatable="false">temp_units</string>
+    <string name="pref_temp_units_metric_label">Metric</string>
+    <string name="pref_temp_units_imperial_label">Imperial</string>
+    <string name="pref_default_temp_units" translatable="false">@string/pref_temp_units_metric</string>
+    <string name="pref_temp_units_metric" translatable="false">metric</string>
+    <string name="pref_temp_units_imperial" translatable="false">imperial</string>
+
+
 </resources>

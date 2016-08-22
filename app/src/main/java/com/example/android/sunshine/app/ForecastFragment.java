@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -40,7 +41,6 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
-
     private ArrayAdapter<String> adapter;
 
     public ForecastFragment() {
@@ -126,10 +126,22 @@ public class ForecastFragment extends Fragment {
             return shortenedDateFormat.format(time);
         }
 
+        private double celciusToFahrenheit(double celcius) {
+            return celcius * 1.8 + 32;
+        }
+
         /**
          * Prepare the weather high/lows for presentation.
          */
-        private String formatHighLows(double high, double low) {
+        private String formatHighLows(double high, double low, String unitType) {
+            if (unitType.equals(getString(R.string.pref_temp_units_imperial))) {
+                high = celciusToFahrenheit(high);
+                low = celciusToFahrenheit(low);
+            }
+            else if (unitType.equals(getString(R.string.pref_temp_units_metric)) == false) {
+                Log.e(LOG_TAG, "Unknown temp unit type: " + unitType);
+            }
+
             // For presentation, assume the user doesn't care about tenths of a degree.
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
@@ -183,6 +195,11 @@ public class ForecastFragment extends Fragment {
             dayTime = new Time();
 
             String[] resultStrs = new String[numDays];
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String tempUnitType = preferences.getString(getString(R.string.pref_key_temp_units),
+                    getString(R.string.pref_default_temp_units));
+
             for(int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
@@ -210,7 +227,7 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
-                highAndLow = formatHighLows(high, low);
+                highAndLow = formatHighLows(high, low, tempUnitType);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
