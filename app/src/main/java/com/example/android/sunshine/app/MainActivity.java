@@ -3,9 +3,10 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
     static private String TAG = MainActivity.class.getSimpleName();
+
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
