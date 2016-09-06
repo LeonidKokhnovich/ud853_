@@ -1,13 +1,18 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity {
+    static private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,32 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
             return true;
         }
+        else if (id == R.id.action_show_preferred_location) {
+            openPreferredLocation();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean openPreferredLocation() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String location = preferences.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default_val));
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri geoLocation = Uri.parse("geo:0,0?")
+                .buildUpon()
+                .appendQueryParameter("q", location)
+                .build();
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+            return true;
+        }
+        else {
+            Log.w(TAG, "Unable to open preferred location : " + location + ", no app to handle the request.");
+        }
+        return false;
     }
 
 }
